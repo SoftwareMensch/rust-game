@@ -17,13 +17,13 @@ namespace Oxide.Plugins
             var block = (objectBlock?.ToBaseEntity() ?? null) as BuildingBlock;
             if (block)
             {
-                this.disableStopTimerOf(block);
+                this.disableDemolishableTimerFor(block);
             }
         }
 
         private void OnStructureUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
         {
-            this.disableStopTimerOf(block);
+            this.disableDemolishableTimerFor(block);
         }
         
         private object OnHammerHit(BasePlayer player, HitInfo hitInfo)
@@ -31,16 +31,16 @@ namespace Oxide.Plugins
             var block = (hitInfo?.HitEntity ?? null) as BuildingBlock;
             if (block)
             {
-                this.disableStopTimerOf(block);
+                this.disableDemolishableTimerFor(block);
             }
             
             return null;
-        }
+        }    
 
-        private void disableStopTimerOf(BuildingBlock block)
+        private void disableDemolishableTimerFor(BuildingBlock block)
         {
-            block.CancelInvoke(block.StopBeingDemolishable); // disable old timer
-            block.SetFlag(BaseEntity.Flags.Reserved2, true); // enables demolishable
+            block.StartBeingDemolishable();
+            block.CancelInvoke(block.StopBeingDemolishable); // disable timer
         }
     }
 }
